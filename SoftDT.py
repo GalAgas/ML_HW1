@@ -4,9 +4,12 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 import numpy as np
 
+
 class SoftDT(BaseEstimator):
 
-    def __init__(self, estimator=DecisionTreeClassifier(max_leaf_nodes=3, random_state=0)):
+    def __init__(self):
+        # estimator = DecisionTreeClassifier(max_leaf_nodes=3, random_state=0)
+        estimator = DecisionTreeClassifier(random_state=0)
         self.estimator = estimator
 
     def fit(self, X, y):
@@ -20,8 +23,6 @@ class SoftDT(BaseEstimator):
         # return self.classes_[np.argmax(D, axis=1)]
         # return self.estimator.predict(X)
         return np.apply_along_axis(self.predict_proba, 1, X)
-
-
 
     # not sure if needed - work without
     def classes_(self):
@@ -58,7 +59,7 @@ class SoftDT(BaseEstimator):
                 else:
                     current_node_id = children_right[current_node_id]
 
-            prob = tree_values[current_node_id]/np.sum(tree_values[current_node_id])
+            prob = tree_values[current_node_id] / np.sum(tree_values[current_node_id])
             total_prob += prob
         return total_prob
 
